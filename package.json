@@ -1,0 +1,27 @@
+{
+  "name": "belajar_express",
+  "version": "1.0.0",
+  "description": "belajar_express",
+  "keywords": [
+    "express"
+  ],
+  "homepage": "https://github.com/axelursia/belajar_express#readme",
+  "bugs": {
+    "url": "https://github.com/axelursia/belajar_express/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axelursia/belajar_express.git"
+  },
+  "license": "ISC",
+  "author": "axel",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
