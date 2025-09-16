@@ -25,6 +25,12 @@ app.get("/mahasiswa", (req, res) => {
   });
 });
 
+// routing untuk path /fakultas dengan parameter id
+app.get("/fakultas/:id", (req, res) => {
+  //res.send(`Fakultas id ${req.params.id}`);
+  res.send("Fakultas ID: " + req.params.id);
+});
+
 // routing untuk path /nilai
 app.get("/nilai", (req, res) => {
   res.json({
