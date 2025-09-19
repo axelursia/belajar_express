@@ -5,30 +5,61 @@ const port = 3000; // port server
 // gunakan ejs
 app.set("view engine", "ejs");
 
+// data navigasi (tambahan untuk semua view)
+const menu = [
+  { name: "Home", url: "/" },
+  { name: "About Us", url: "/about" },
+  { name: "Prodi", url: "/prodi" },
+  { name: "Contact Us", url: "/contact" },
+];
+
+// data program studi
+const prodi = [
+  { nama: "Sistem Informasi", singkatan: "SI", fakultas: "Fakultas Ilmu Komputer dan Rekayasa" },
+  { nama: "Informatika", singkatan: "IF", fakultas: "Fakultas Ilmu Komputer dan Rekayasa" },
+  { nama: "Manajemen Informatika", singkatan: "MI", fakultas: "Fakultas Ilmu Komputer dan Rekayasa" },
+  { nama: "Teknik Elektro", singkatan: "TE", fakultas: "Fakultas Ilmu Komputer dan Rekayasa" },
+  { nama: "Akuntansi", singkatan: "AK", fakultas: "Fakultas Ekonomi dan Bisnis" },
+  { nama: "Manajemen", singkatan: "MJ", fakultas: "Fakultas Ekonomi dan Bisnis" },
+];
+
+// ================= ROUTING =================
+
 // routing untuk path / atau root path
 app.get("/", (req, res) => {
-  //res.send("Hello World!");
-  //res.render("index");
+  // contoh data berita (belum dipakai di view saat ini)
+  /*
   const news = [
     { id: 1, title: "Berita 1", content: "..." },
     { id: 2, title: "Berita 2", content: "..." },
     { id: 3, title: "Berita 3", content: "..." },
   ];
-  res.render("index", { news });
+  res.render("Home", { news, menu });
+  */
+
+  // saat ini hanya render menu
+  res.render("index", { menu });
+});
+
+// routing prodi
+app.get("/prodi", (req, res) => {
+  res.render("prodi", { prodi, menu }); // kirim data prodi & menu
 });
 
 // routing untuk path /about
 app.get("/about", (req, res) => {
-  res.render("about");
-  //res.send("About Us");
+  res.render("about", { menu });
 });
 
 // routing untuk path /contact
 app.get("/contact", (req, res) => {
-  res.render("contact");
-  //res.sendFile(__dirname + "/contact.html");
+  res.render("contact", { menu });
 });
 
+// ================= OPSIONAL / CONTOH ENDPOINT =================
+
+// routing untuk path /mahasiswa (JSON, bukan EJS)
+/*
 app.get("/mahasiswa", (req, res) => {
   res.json({
     status: "Success",
@@ -36,25 +67,31 @@ app.get("/mahasiswa", (req, res) => {
     data: ["Axel", "Naufal", "Marcel"],
   });
 });
+*/
 
 // routing untuk path /fakultas dengan parameter id
+/*
 app.get("/fakultas/:id", (req, res) => {
-  //res.send(`Fakultas id ${req.params.id}`);
   res.send("Fakultas ID: " + req.params.id);
 });
+*/
 
 // routing untuk path /nilai
+/*
 app.get("/nilai", (req, res) => {
   res.json({
-    status: "succes",
+    status: "success",
     message: "Data nilai mahasiswa",
     data: [
-      { mk: "bahasa indonesia", nilai: "A" },
+      { mk: "Bahasa Indonesia", nilai: "A" },
       { mk: "PAW 1", nilai: "A" },
       { mk: "PAB 1", nilai: "A" },
     ],
   });
 });
+*/
+
+// ================= ERROR HANDLING =================
 
 // middleware untuk menangani error 404
 app.use((req, res) => {
@@ -62,7 +99,9 @@ app.use((req, res) => {
   res.send("<h1>404 Not Found</h1>");
 });
 
+// ================= SERVER =================
+
 // jalankan server pada port 3000
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Server berjalan di http://localhost:${port}`);
 });

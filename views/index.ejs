@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact Us</title>
+    <title>Home</title>
   </head>
   <body>
-    <a href="/">HOME</a> | <a href="/">ABOUT</a> | <a href="/">CONTACT</a>
-    <h1>HOME</h1>
-    <p>ini Halaman home</p>
+    <ul>
+      <% menu.forEach(m => { %>
+      <li><a href="<%= m.url %>"><%= m.name %></a></li>
+      <% }) %>
+    </ul>
+    <hr />
 
-    <!--berita-->
-    <% news.forEach(item => { %> <%= item.title %> <br />
-    <%= item.content %> <br />
-    <% }) %>
+    <h2>Home</h2>
+    <p>Selamat datang di website kami!</p>
   </body>
 </html>

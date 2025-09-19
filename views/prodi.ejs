@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Halaman Program Studi</title>
+  </head>
+  <body>
+    <h1>Home</h1>
+    <ul>
+      <% menu.forEach(item => { %>
+      <li><a href="<%= item.url %>"><%= item.name %></a></li>
+      <% }) %>
+    </ul>
+
+    <h2>Program Studi</h2>
+    <table border="1" cellspacing="0" cellpadding="5">
+      <tr>
+        <th>Prodi</th>
+        <th>Singkatan</th>
+        <th>Fakultas</th>
+      </tr>
+      <% prodi.forEach(p => { %>
+      <tr>
+        <td><%= p.nama %></td>
+        <td><%= p.singkatan %></td>
+        <td><%= p.fakultas %></td>
+      </tr>
+      <% }) %>
+    </table>
+  </body>
+</html>
