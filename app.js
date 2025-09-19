@@ -7,12 +7,20 @@ app.set("view engine", "ejs");
 
 // routing untuk path / atau root path
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  //res.send("Hello World!");
+  //res.render("index");
+  const news = [
+    { id: 1, title: "Berita 1", content: "..." },
+    { id: 2, title: "Berita 2", content: "..." },
+    { id: 3, title: "Berita 3", content: "..." },
+  ];
+  res.render("index", { news });
 });
 
 // routing untuk path /about
 app.get("/about", (req, res) => {
-  res.send("About Us");
+  res.render("about");
+  //res.send("About Us");
 });
 
 // routing untuk path /contact

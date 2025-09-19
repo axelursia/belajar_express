@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us</title>
+  </head>
+  <body>
+    <a href="/">HOME</a> | <a href="/">ABOUT</a> | <a href="/">CONTACT</a>
+    <h1>HOME</h1>
+    <p>ini Halaman home</p>
+
+    <!--berita-->
+    <% news.forEach(item => { %> <%= item.title %> <br />
+    <%= item.content %> <br />
+    <% }) %>
+  </body>
+</html>
