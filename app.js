@@ -2,6 +2,9 @@ const express = require("express"); // impor express
 const app = express(); // inisialisasi express
 const port = 3000; // port server
 
+// gunakan ejs
+app.set("view engine", "ejs");
+
 // routing untuk path / atau root path
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -14,7 +17,8 @@ app.get("/about", (req, res) => {
 
 // routing untuk path /contact
 app.get("/contact", (req, res) => {
-  res.sendFile(__dirname + "/contact.html");
+  res.render("contact");
+  //res.sendFile(__dirname + "/contact.html");
 });
 
 app.get("/mahasiswa", (req, res) => {
