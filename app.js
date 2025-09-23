@@ -6,6 +6,9 @@ const port = 3000; // port server
 // gunakan ejs
 app.set("view engine", "ejs");
 
+app.set("layout", "main"); // set layout utama
+app.use(express.static("public")); // gunakan folder public sebagai static file
+
 app.use(expressLayout); // gunakan express-ejs-layouts
 
 // data navigasi (tambahan untuk semua view)
@@ -29,32 +32,29 @@ const prodi = [
 // routing untuk path / atau root path
 app.get("/", (req, res) => {
   // contoh data berita (belum dipakai di view saat ini)
-  /*
+
   const news = [
     { id: 1, title: "Berita 1", content: "..." },
     { id: 2, title: "Berita 2", content: "..." },
     { id: 3, title: "Berita 3", content: "..." },
   ];
-  res.render("Home", { news, menu });
-  */
-
-  // saat ini hanya render menu
-  res.render("index", { menu });
+  res.render("index", { news, title: "Home", layout: "main" });
 });
 
 // routing prodi
 app.get("/prodi", (req, res) => {
-  res.render("prodi", { prodi, menu }); // kirim data prodi & menu
+  res.render("prodi", { prodi, title: "Prodi", layout: "main" });
 });
 
 // routing untuk path /about
 app.get("/about", (req, res) => {
-  res.render("about", { menu });
+  res.render("about", { title: "About Us", layout: "main" });
+  //res.render("about", { menu });
 });
 
 // routing untuk path /contact
 app.get("/contact", (req, res) => {
-  res.render("contact", { menu });
+  res.render("contact", { title: "contact Us", layout: "main" });
 });
 
 // routing untuk path /mahasiswa (JSON, bukan EJS)
