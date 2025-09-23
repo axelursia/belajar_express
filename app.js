@@ -1,9 +1,12 @@
 const express = require("express"); // impor express
+const expressLayout = require("express-ejs-layouts"); // impor express-ejs-layouts
 const app = express(); // inisialisasi express
 const port = 3000; // port server
 
 // gunakan ejs
 app.set("view engine", "ejs");
+
+app.use(expressLayout); // gunakan express-ejs-layouts
 
 // data navigasi (tambahan untuk semua view)
 const menu = [
@@ -22,8 +25,6 @@ const prodi = [
   { nama: "Akuntansi", singkatan: "AK", fakultas: "Fakultas Ekonomi dan Bisnis" },
   { nama: "Manajemen", singkatan: "MJ", fakultas: "Fakultas Ekonomi dan Bisnis" },
 ];
-
-// ================= ROUTING =================
 
 // routing untuk path / atau root path
 app.get("/", (req, res) => {
@@ -55,8 +56,6 @@ app.get("/about", (req, res) => {
 app.get("/contact", (req, res) => {
   res.render("contact", { menu });
 });
-
-// ================= OPSIONAL / CONTOH ENDPOINT =================
 
 // routing untuk path /mahasiswa (JSON, bukan EJS)
 /*
@@ -91,15 +90,11 @@ app.get("/nilai", (req, res) => {
 });
 */
 
-// ================= ERROR HANDLING =================
-
 // middleware untuk menangani error 404
 app.use((req, res) => {
   res.status(404);
   res.send("<h1>404 Not Found</h1>");
 });
-
-// ================= SERVER =================
 
 // jalankan server pada port 3000
 app.listen(port, () => {

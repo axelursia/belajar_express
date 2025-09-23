@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Home</title>
+    <title>Halaman Program Studi</title>
   </head>
   <body>
+    <h1>Home</h1>
     <ul>
-      <% menu.forEach(m => { %>
-      <li><a href="<%= m.url %>"><%= m.name %></a></li>
+      <% menu.forEach(item => { %>
+      <li><a href="<%= item.url %>"><%= item.name %></a></li>
       <% }) %>
     </ul>
-    <hr />
-
-    <h2>Home</h2>
-    <p>Selamat datang di website kami!</p>
   </body>
 </html>
