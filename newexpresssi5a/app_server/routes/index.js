@@ -1,10 +1,10 @@
 var express = require("express");
 var router = express.Router();
 
+const mainControllers = require("../controllers/maincontrollers");
+
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express", layout: "main" });
-});
+router.get("/", mainControllers.index);
 
 router.get("/contact", function (req, res, next) {
   res.render("contact", { title: "Contact Us", layout: "main" });
