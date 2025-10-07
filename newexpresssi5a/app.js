@@ -4,7 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const expressLayout = require("express-ejs-layouts");
-
+const connectDB = require("./app_api/models/db");
 var indexRouter = require("./app_server/routes/index");
 var usersRouter = require("./app_server/routes/users");
 
