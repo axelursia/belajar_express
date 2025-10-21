@@ -1,21 +1,20 @@
-<h2>Program Studi</h2>
-<hr />
-<p>Berikut adalah daftar program studi yang tersedia di Universitas Multi Data Palembang.</p>
+<h1><%= title %></h1>
 
-<table class="table table-striped table-hover">
-  <thead class="table-dark">
+<!-- Tabel -->
+<table class="table table-hover table-striped">
+  <thead>
     <tr>
-      <th>Nama Prodi</th>
+      <th>Nama</th>
       <th>Singkatan</th>
       <th>Fakultas</th>
     </tr>
   </thead>
   <tbody>
-    <% prodi.forEach((p) => { %>
+    <% data.forEach(item => { %>
     <tr>
-      <td><%= p.nama %></td>
-      <td><%= p.singkatan %></td>
-      <td><%= p.fakultas %></td>
+      <td><%= item.nama %></td>
+      <td><%= item.singkatan %></td>
+      <td><%= item.fakultas %></td>
     </tr>
     <% }) %>
   </tbody>

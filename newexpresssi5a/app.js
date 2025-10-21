@@ -3,15 +3,23 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const expressLayout = require("express-ejs-layouts");
+var expressLayouts = require("express-ejs-layouts"); // impor express-ejs-layouts
 const connectDB = require("./app_api/models/db");
+connectDB(); //connect to mongoDB
+
+// route app_api
+const fakultasRouterAPI = require("./app_api/routes/fakultas");
+const prodiRouterAPI = require("./app_api/routes/prodi");
+const mahasiswaRouterAPI = require("./app_api/routes/mahasiswa");
+
+// route app_server
 var indexRouter = require("./app_server/routes/index");
 var usersRouter = require("./app_server/routes/users");
 
 var app = express();
 
 // view engine setup
-app.set("views", path.join(__dirname, `app_server`, "views"));
+app.set("views", path.join(__dirname, "app_server", "views"));
 app.set("view engine", "ejs");
 
 app.use(logger("dev"));
@@ -19,10 +27,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(expressLayout);
+app.use(expressLayouts);
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/api/fakultas", fakultasRouterAPI);
+app.use("/api/prodi", prodiRouterAPI);
+app.use("/api/mahasiswa", mahasiswaRouterAPI);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
