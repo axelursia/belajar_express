@@ -6,6 +6,7 @@ var logger = require("morgan");
 var expressLayouts = require("express-ejs-layouts"); // impor express-ejs-layouts
 const connectDB = require("./app_api/models/db");
 connectDB(); //connect to mongoDB
+var cors = require("cors");
 
 // route app_api
 const fakultasRouterAPI = require("./app_api/routes/fakultas");
@@ -17,7 +18,7 @@ var indexRouter = require("./app_server/routes/index");
 var usersRouter = require("./app_server/routes/users");
 
 var app = express();
-
+app.use(cors());
 // view engine setup
 app.set("views", path.join(__dirname, "app_server", "views"));
 app.set("view engine", "ejs");

@@ -6,6 +6,7 @@ const fakultasController = require("../controllers/fakultasController");
 
 // route GET fakultas
 router.get("/", fakultasController.getAllFakultas);
+router.post("/", fakultasController.createFakultas);
 
 // expor module
 module.exports = router;
