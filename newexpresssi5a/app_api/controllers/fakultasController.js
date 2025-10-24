@@ -12,18 +12,32 @@ const getAllFakultas = async (req, res) => {
   }
 };
 
-const createFakultas = async (req, res) => {
-  // buat intanst
-  const fakultas = new fakultasSchema({
-    nama: req.body.nama,
-    singkatan: req.body.singkatan,
-  });
+// fungsi untuk mengambil isi collection fakultas bersaarkan parameter id
+const getFakultasById = async (req, res) => {
+  try {
+    // GET collection fakultas berdasarkan id
+    const result = await fakultasSchema.findById(req.params.id);
+    if (!result) {
+      res.status(404).json({ message: "Fakultas not found" });
+    } else {
+      res.status(200).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-  // simpan data fakultas ke dalam collection
-  const hasil = await fakultas.save();
-  //beri respon json http created
-  res.status(201).json(hasil);
+const createFakultas = async (req, res) => {
+  // // buat intanst
+  // const fakultas = new fakultasSchema({
+  //   nama: req.body.nama,
+  //   singkatan: req.body.singkatan,
+  // });
+  // // simpan data fakultas ke dalam collection
+  // const hasil = await fakultas.save();
+  // //beri respon json http created
+  // res.status(201).json(hasil);
 };
 
 // export
-module.exports = { getAllFakultas, createFakultas };
+module.exports = { getAllFakultas, getfakultasById, createFakultas };
