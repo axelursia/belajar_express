@@ -13,6 +13,8 @@ const fakultasRouterAPI = require("./app_api/routes/fakultas");
 const prodiRouterAPI = require("./app_api/routes/prodi");
 const mahasiswaRouterAPI = require("./app_api/routes/mahasiswa");
 const beritaRouter = require("./app_api/routes/berita");
+const projectRoutes = require("./app_api/routes/projectRoutes");
+const memberRoutes = require("./app_api/routes/memberRoutes");
 
 // route app_server
 var indexRouter = require("./app_server/routes/index");
@@ -37,6 +39,8 @@ app.use("/api/fakultas", fakultasRouterAPI);
 app.use("/api/prodi", prodiRouterAPI);
 app.use("/api/mahasiswa", mahasiswaRouterAPI);
 app.use("/api/berita", beritaRouter);
+app.use("/api/projects", projectRoutes);
+app.use("/api/members", memberRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
