@@ -5,7 +5,7 @@ import axios from "axios";
 export default function MahasiswaList() {
   const [mahasiswa, setMahasiswa] = useState([]);
   const [prodiMap, setProdiMap] = useState({});
-  const [fakultasMap, setFakultasMap] = useState({});
+  const [facultyMap, setFacultyMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -18,6 +18,19 @@ export default function MahasiswaList() {
           axios.get("https://newexpresssi5a-weld.vercel.app/api/Prodi"),
           axios.get("https://newexpresssi5a-weld.vercel.app/api/fakultas"),
         ]);
+
+        // DEBUG: print one sample from each response to help map fields (remove in production)
+        try {
+          // safe logging: may be undefined
+          // eslint-disable-next-line no-console
+          console.log("[debug] mahasiswa sample:", Array.isArray(mRes.data) ? mRes.data[0] : mRes.data);
+          // eslint-disable-next-line no-console
+          console.log("[debug] prodi sample:", Array.isArray(pRes.data) ? pRes.data[0] : pRes.data);
+          // eslint-disable-next-line no-console
+          console.log("[debug] fakultas sample:", Array.isArray(fRes.data) ? fRes.data[0] : fRes.data);
+        } catch (err) {
+          // ignore logging errors
+        }
 
         // build prodi map id -> {nama, singkatan, fakultasId}
         const pMap = {};
@@ -34,7 +47,7 @@ export default function MahasiswaList() {
           });
         }
 
-        // build fakultas map id -> nama
+        // build faculty map id -> nama (sama seperti Prodi/List.jsx)
         const fMap = {};
         if (Array.isArray(fRes.data)) {
           fRes.data.forEach((f) => {
@@ -44,7 +57,7 @@ export default function MahasiswaList() {
         }
 
         setProdiMap(pMap);
-        setFakultasMap(fMap);
+        setFacultyMap(fMap);
         setMahasiswa(mRes.data);
         setError(null);
       } catch (err) {
@@ -81,15 +94,19 @@ export default function MahasiswaList() {
             mahasiswa.map((m) => {
               // resolve prodi info (support object or id)
               const prodiId = m.prodi?._id ?? m.prodi ?? m.prodiId ?? m.prodi_id ?? null;
-              const prodiInfo = prodiMap[prodiId] ?? (m.prodi && typeof m.prodi === "object" ? {
-                nama: m.prodi.nama ?? m.prodi.name,
-                singkatan: m.prodi.singkatan,
-                fakultasId: m.prodi.fakultas_id?._id ?? m.prodi.fakultas_id ?? m.prodi.fakultas?._id ?? m.prodi.fakultas,
-              } : {});
+              const prodiInfo =
+                prodiMap[prodiId] ??
+                (m.prodi && typeof m.prodi === "object"
+                  ? {
+                      nama: m.prodi.nama ?? m.prodi.name,
+                      singkatan: m.prodi.singkatan,
+                      fakultasId: m.prodi.fakultas_id?._id ?? m.prodi.fakultas_id ?? m.prodi.fakultas?._id ?? m.prodi.fakultas,
+                    }
+                  : {});
 
               // resolve fakultas id and name
               const fakultasId = prodiInfo.fakultasId ?? m.fakultas_id?._id ?? m.fakultas_id ?? null;
-              const fakultasNama = fakultasMap[fakultasId] ?? m.fakultas_id?.nama ?? m.namafakultas ?? m.namaFakultas ?? "";
+              const fakultasNama = facultyMap[fakultasId] ?? m.fakultas_id?.nama ?? m.namafakultas ?? m.namaFakultas ?? "";
 
               return (
                 <tr key={m._id ?? m.npm ?? Math.random()}>
