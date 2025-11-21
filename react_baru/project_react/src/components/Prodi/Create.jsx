@@ -5,7 +5,7 @@ import axios from "axios";
 // Import useNavigate untuk navigasi
 import { useNavigate } from "react-router-dom";
 
-export default function CreateFakultas() {
+export default function CreateProdi() {
   // useNavigate hook untuk redirect
   const navigate = useNavigate();
 
@@ -13,6 +13,7 @@ export default function CreateFakultas() {
   const [formData, setFormData] = useState({
     nama: "",
     singkatan: "",
+    fakultas_id: "",
   });
 
   // State untuk menyimpan pesan error
@@ -45,14 +46,14 @@ export default function CreateFakultas() {
 
     try {
       // Kirim POST request ke API
-      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/fakultas", formData);
+      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/Prodi", formData);
 
-      console.log("Fakultas created:", response.data);
+      console.log("Prodi created:", response.data);
 
-      // Redirect ke halaman list fakultas
-      navigate("/fakultas");
+      // Redirect ke halaman list Prodi
+      navigate("/Prodi");
     } catch (err) {
-      console.error("Error creating fakultas:", err);
+      console.error("Error creating Prodi:", err);
       setError(err.response?.data?.message || err.message || "Terjadi kesalahan saat menyimpan data");
     } finally {
       setLoading(false);
@@ -62,7 +63,7 @@ export default function CreateFakultas() {
   // Render form dengan navigasi
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">Tambah Fakultas</h2>
+      <h2 className="mb-4">Tambah Prodi</h2>
 
       {/* Tampilkan pesan error jika ada */}
       {error && (
@@ -74,9 +75,9 @@ export default function CreateFakultas() {
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="nama" className="form-label">
-            Nama Fakultas
+            Nama Prodi
           </label>
-          <input type="text" className="form-control" id="nama" name="nama" value={formData.nama} onChange={handleChange} placeholder="Contoh: Fakultas Teknik" disabled={loading} />
+          <input type="text" className="form-control" id="nama" name="nama" value={formData.nama} onChange={handleChange} placeholder="Contoh: Prodi Teknik" disabled={loading} />
         </div>
 
         <div className="mb-3">
@@ -86,11 +87,18 @@ export default function CreateFakultas() {
           <input type="text" className="form-control" id="singkatan" name="singkatan" value={formData.singkatan} onChange={handleChange} placeholder="Contoh: FT" disabled={loading} />
         </div>
 
+        <div className="mb-3">
+          <label htmlFor="fakultas_id" className="form-label">
+            ID Fakultas
+          </label>
+          <input type="text" className="form-control" id="fakultas_id" name="fakultas_id" value={formData.fakultas_id} onChange={handleChange} placeholder="Contoh: 68e8ba1e9bf8693190c6a39d" disabled={loading} />
+        </div>
+
         <div className="d-flex gap-2">
           <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Menyimpan..." : "Simpan"}
           </button>
-          <button type="button" className="btn btn-secondary" onClick={() => navigate("/fakultas")} disabled={loading}>
+          <button type="button" className="btn btn-secondary" onClick={() => navigate("/Prodi")} disabled={loading}>
             Batal
           </button>
         </div>
