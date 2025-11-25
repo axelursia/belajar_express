@@ -74,6 +74,41 @@ export default function MahasiswaList() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  // useEffect(() => {
+  //   // Fungsi async untuk fetch data Prodi dan Fakultas dari API
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       // Ambil Prodi dan Fakultas secara paralel
+  //       const [prodiRes, fakultasRes] = await Promise.all([axios.get("https://newexpresssi5a-weld.vercel.app/api/Prodi"), axios.get("https://newexpresssi5a-weld.vercel.app/api/fakultas")]);
+
+  //       // Buat peta id -> nama untuk fakultas
+  //       const map = {};
+  //       if (Array.isArray(fakultasRes.data)) {
+  //         fakultasRes.data.forEach((f) => {
+  //           const id = f._id ?? f.id ?? f._doc?._id;
+  //           const name = f.nama ?? f.name ?? f.namafakultas ?? f.namasingkatan ?? "";
+  //           if (id) map[id] = name;
+  //         });
+  //       }
+
+  //       setFacultyMap(map);
+
+  //       // Simpan data Prodi
+  //       setProdi(prodiRes.data);
+  //       setError(null);
+  //     } catch (err) {
+  //       setError(err.message);
+  //       console.error("Error fetching Prodi or Fakultas:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   // Panggil fungsi fetchData
+  //   fetchData();
+  // }, []); // Dependency array kosong = hanya dijalankan sekali saat mount
+
   return (
     <div>
       <h1>Mahasiswa List</h1>

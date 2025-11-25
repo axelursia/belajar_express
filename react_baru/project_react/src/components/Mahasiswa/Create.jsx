@@ -5,9 +5,9 @@ import axios from "axios";
 // Import useNavigate untuk navigasi
 import { useNavigate } from "react-router-dom";
 
-export default function CreateProdi() {
-  //state untuk menyimpan lis fakultas (API)
-  const [fakultas, setFakultas] = useState([]);
+export default function CreateMahasiswa() {
+  //state untuk menyimpan lis Mahasiswa (API)
+  const [mahasiswa, setMahasiswa] = useState([]);
 
   // useNavigate hook untuk redirect
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function CreateProdi() {
   const [formData, setFormData] = useState({
     nama: "",
     singkatan: "",
-    fakultas_id: "",
+    Mahasiswa_id: "",
   });
 
   // State untuk menyimpan pesan error
@@ -49,14 +49,14 @@ export default function CreateProdi() {
 
     try {
       // Kirim POST request ke API
-      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/Prodi", formData);
+      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/Mahasiswa", formData);
 
-      console.log("Prodi created:", response.data);
+      console.log("Mahasiswa created:", response.data);
 
-      // Redirect ke halaman list Prodi
-      navigate("/Prodi");
+      // Redirect ke halaman list Mahasiswa
+      navigate("/Mahasiswa");
     } catch (err) {
-      console.error("Error creating Prodi:", err);
+      console.error("Error creating Mahasiswa:", err);
       setError(err.response?.data?.message || err.message || "Terjadi kesalahan saat menyimpan data");
     } finally {
       setLoading(false);
@@ -65,34 +65,34 @@ export default function CreateProdi() {
 
   useEffect(() => {
     // Fungsi async untuk fetch data dari API
-    const fetchFakultas = async () => {
+    const fetchMahasiswa = async () => {
       try {
         // Set loading true sebelum fetch data
         setLoading(true);
         // Mengambil data dari API menggunakan axios
-        const response = await axios.get("https://newexpresssi5a-weld.vercel.app/api/fakultas");
-        // Simpan data yang diterima ke state fakultas
-        setFakultas(response.data);
+        const response = await axios.get("https://newexpresssi5a-weld.vercel.app/api/Mahasiswa");
+        // Simpan data yang diterima ke state Mahasiswa
+        setMahasiswa(response.data);
         // Reset error jika fetch berhasil
         setError(null);
       } catch (err) {
         // Jika terjadi error, simpan pesan error ke state
         setError(err.message);
-        console.error("Error fetching fakultas:", err);
+        console.error("Error fetching Mahasiswa:", err);
       } finally {
         // Set loading false setelah proses selesai (berhasil atau gagal)
         setLoading(false);
       }
     };
 
-    // Panggil fungsi fetchFakultas
-    fetchFakultas();
+    // Panggil fungsi fetchMahasiswa
+    fetchMahasiswa();
   }, []); // Dependency array kosong = hanya dijalankan sekali saat mount
 
   // Render form dengan navigasi
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">Tambah Prodi</h2>
+      <h2 className="mb-4">Tambah Mahasiswa</h2>
 
       {/* Tampilkan pesan error jika ada */}
       {error && (
@@ -104,9 +104,9 @@ export default function CreateProdi() {
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="nama" className="form-label">
-            Nama Prodi
+            Nama Mahasiswa
           </label>
-          <input type="text" className="form-control" id="nama" name="nama" value={formData.nama} onChange={handleChange} placeholder="Contoh: Prodi Teknik" disabled={loading} />
+          <input type="text" className="form-control" id="nama" name="nama" value={formData.nama} onChange={handleChange} placeholder="Contoh: Mahasiswa Teknik" disabled={loading} />
         </div>
 
         <div className="mb-3">
@@ -117,13 +117,13 @@ export default function CreateProdi() {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="fakultas_id" className="form-label">
-            ID Fakultas
+          <label htmlFor="Mahasiswa_id" className="form-label">
+            ID Mahasiswa
           </label>
-          <select name="fakultas_id" id="fakultas_id" value={formData.fakultas_id} onchange={handleChange} className="form-control">
-            {fakultas.map((fakultasItem) => (
-              <option key={fakultasItem._id} value={fakultasItem._id}>
-                {fakultasItem.nama}
+          <select name="Mahasiswa_id" id="Mahasiswa_id" value={formData.Mahasiswa_id} onchange={handleChange} className="form-control">
+            {Mahasiswa.map((MahasiswaItem) => (
+              <option key={MahasiswaItem._id} value={MahasiswaItem._id}>
+                {MahasiswaItem.nama}
               </option>
             ))}
           </select>
@@ -133,7 +133,7 @@ export default function CreateProdi() {
           <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Menyimpan..." : "Simpan"}
           </button>
-          <button type="button" className="btn btn-secondary" onClick={() => navigate("/Prodi")} disabled={loading}>
+          <button type="button" className="btn btn-secondary" onClick={() => navigate("/Mahasiswa")} disabled={loading}>
             Batal
           </button>
         </div>
