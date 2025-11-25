@@ -6,17 +6,19 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateMahasiswa() {
-  //state untuk menyimpan lis Mahasiswa (API)
-  const [mahasiswa, setMahasiswa] = useState([]);
+  //state untuk menyimpan list prodi (untuk select)
+  const [prodi, setProdi] = useState([]);
 
   // useNavigate hook untuk redirect
   const navigate = useNavigate();
 
   // State untuk menyimpan nilai input form
   const [formData, setFormData] = useState({
+    npm: "",
     nama: "",
-    singkatan: "",
-    Mahasiswa_id: "",
+    tempat_lahir: "",
+    tanggal_lahir: "",
+    prodi_id: "",
   });
 
   // State untuk menyimpan pesan error
@@ -39,8 +41,8 @@ export default function CreateMahasiswa() {
     e.preventDefault();
 
     // Validasi input
-    if (!formData.nama || !formData.singkatan) {
-      setError("Semua field harus diisi!");
+    if (!formData.npm || !formData.nama || !formData.prodi_id) {
+      setError("Field NPM, Nama, dan Prodi wajib diisi!");
       return;
     }
 
@@ -48,13 +50,13 @@ export default function CreateMahasiswa() {
     setError(null);
 
     try {
-      // Kirim POST request ke API
-      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/Mahasiswa", formData);
+      // Kirim POST request ke API (endpoint lowercase /api/mahasiswa sesuai List.jsx)
+      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/mahasiswa", formData);
 
       console.log("Mahasiswa created:", response.data);
 
       // Redirect ke halaman list Mahasiswa
-      navigate("/Mahasiswa");
+      navigate("/mahasiswa");
     } catch (err) {
       console.error("Error creating Mahasiswa:", err);
       setError(err.response?.data?.message || err.message || "Terjadi kesalahan saat menyimpan data");
@@ -62,32 +64,24 @@ export default function CreateMahasiswa() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
-    // Fungsi async untuk fetch data dari API
-    const fetchMahasiswa = async () => {
+    // Fetch daftar Prodi untuk dipilih di form
+    const fetchProdi = async () => {
       try {
-        // Set loading true sebelum fetch data
         setLoading(true);
-        // Mengambil data dari API menggunakan axios
-        const response = await axios.get("https://newexpresssi5a-weld.vercel.app/api/Mahasiswa");
-        // Simpan data yang diterima ke state Mahasiswa
-        setMahasiswa(response.data);
-        // Reset error jika fetch berhasil
+        const res = await axios.get("https://newexpresssi5a-weld.vercel.app/api/Prodi");
+        setProdi(Array.isArray(res.data) ? res.data : []);
         setError(null);
       } catch (err) {
-        // Jika terjadi error, simpan pesan error ke state
-        setError(err.message);
-        console.error("Error fetching Mahasiswa:", err);
+        setError(err.message || String(err));
+        console.error("Error fetching prodi:", err);
       } finally {
-        // Set loading false setelah proses selesai (berhasil atau gagal)
         setLoading(false);
       }
     };
 
-    // Panggil fungsi fetchMahasiswa
-    fetchMahasiswa();
-  }, []); // Dependency array kosong = hanya dijalankan sekali saat mount
+    fetchProdi();
+  }, []);
 
   // Render form dengan navigasi
   return (
@@ -103,27 +97,44 @@ export default function CreateMahasiswa() {
 
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
+          <label htmlFor="npm" className="form-label">
+            NPM
+          </label>
+          <input type="text" className="form-control" id="npm" name="npm" value={formData.npm} onChange={handleChange} placeholder="Contoh: 1903010001" disabled={loading} />
+        </div>
+
+        <div className="mb-3">
           <label htmlFor="nama" className="form-label">
             Nama Mahasiswa
           </label>
-          <input type="text" className="form-control" id="nama" name="nama" value={formData.nama} onChange={handleChange} placeholder="Contoh: Mahasiswa Teknik" disabled={loading} />
+          <input type="text" className="form-control" id="nama" name="nama" value={formData.nama} onChange={handleChange} placeholder="Contoh: Budi" disabled={loading} />
         </div>
 
         <div className="mb-3">
-          <label htmlFor="singkatan" className="form-label">
-            Singkatan
+          <label htmlFor="tempat_lahir" className="form-label">
+            Tempat Lahir
           </label>
-          <input type="text" className="form-control" id="singkatan" name="singkatan" value={formData.singkatan} onChange={handleChange} placeholder="Contoh: FT" disabled={loading} />
+          <input type="text" className="form-control" id="tempat_lahir" name="tempat_lahir" value={formData.tempat_lahir} onChange={handleChange} placeholder="Contoh: Jakarta" disabled={loading} />
         </div>
 
         <div className="mb-3">
-          <label htmlFor="Mahasiswa_id" className="form-label">
-            ID Mahasiswa
+          <label htmlFor="tanggal_lahir" className="form-label">
+            Tanggal Lahir
           </label>
-          <select name="Mahasiswa_id" id="Mahasiswa_id" value={formData.Mahasiswa_id} onchange={handleChange} className="form-control">
-            {Mahasiswa.map((MahasiswaItem) => (
-              <option key={MahasiswaItem._id} value={MahasiswaItem._id}>
-                {MahasiswaItem.nama}
+          <input type="date" className="form-control" id="tanggal_lahir" name="tanggal_lahir" value={formData.tanggal_lahir} onChange={handleChange} disabled={loading} />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="prodi_id" className="form-label">
+            Prodi
+          </label>
+          <select name="prodi_id" id="prodi_id" className="form-select" value={formData.prodi_id} onChange={handleChange} disabled={loading}>
+            <option value="" disabled>
+              -- Pilih Prodi --
+            </option>
+            {prodi.map((p) => (
+              <option key={p._id} value={p._id}>
+                {p.nama} {p.singkatan ? `(${p.singkatan})` : ""}
               </option>
             ))}
           </select>
@@ -133,7 +144,7 @@ export default function CreateMahasiswa() {
           <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Menyimpan..." : "Simpan"}
           </button>
-          <button type="button" className="btn btn-secondary" onClick={() => navigate("/Mahasiswa")} disabled={loading}>
+          <button type="button" className="btn btn-secondary" onClick={() => navigate("/mahasiswa")} disabled={loading}>
             Batal
           </button>
         </div>

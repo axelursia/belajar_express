@@ -1,6 +1,7 @@
 // Komponen list Mahasiswa
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 export default function MahasiswaList() {
   const [mahasiswa, setMahasiswa] = useState([]);
@@ -112,6 +113,9 @@ export default function MahasiswaList() {
   return (
     <div>
       <h1>Mahasiswa List</h1>
+      <NavLink to="/mahasiswa/create" className="btn btn-primary mb-3">
+        Tambah Mahasiswa
+      </NavLink>
       <table className="table table-striped table-hover">
         <thead>
           <tr>

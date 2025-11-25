@@ -6,6 +6,7 @@ const FakultasList = React.lazy(() => import("./components/Fakultas/List"));
 const FakultasCreate = React.lazy(() => import("./components/Fakultas/Create"));
 const ProdiList = React.lazy(() => import("./components/Prodi/List"));
 const ProdiCreate = React.lazy(() => import("./components/Prodi/Create"));
+const MahasiswaCreate = React.lazy(() => import("./components/Mahasiswa/Create"));
 const MahasiswaList = React.lazy(() => import("./components/Mahasiswa/List"));
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
           <Route path="/fakultas/create" element={<FakultasCreate />} />
           <Route path="/prodi" element={<ProdiList />} />
           <Route path="/prodi/create" element={<ProdiCreate />} />
+          <Route path="/mahasiswa/create" element={<MahasiswaCreate />} />
           <Route path="/mahasiswa" element={<MahasiswaList />} />
         </Routes>
       </Suspense>
