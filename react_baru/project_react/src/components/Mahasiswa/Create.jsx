@@ -51,7 +51,14 @@ export default function CreateMahasiswa() {
 
     try {
       // Kirim POST request ke API (endpoint lowercase /api/mahasiswa sesuai List.jsx)
-      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/mahasiswa", formData);
+      // Include both `prodi_id` and `prodi` (id) to increase compatibility with backend expectations
+      const payload = {
+        ...formData,
+        prodi_id: formData.prodi_id,
+        prodi: formData.prodi_id,
+      };
+
+      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/mahasiswa", payload);
 
       console.log("Mahasiswa created:", response.data);
 
