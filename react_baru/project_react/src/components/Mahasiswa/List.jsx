@@ -88,7 +88,7 @@ export default function MahasiswaList() {
   const handleDelete = (id, nama) => {
     Swal.fire({
       title: "Apakah kamu yakin?",
-      text: `Kamu tidak akan bisa meengembalikan ini! Fakultas: ${nama}`,
+      text: `Kamu tidak akan bisa mengembalikan ini! Mahasiswa: ${nama}`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -96,18 +96,26 @@ export default function MahasiswaList() {
       confirmButtonText: "Ya, Hapus!",
     }).then((result) => {
       // Lakukan penghapusan jika dikonfirmasi
+
       if (result.isConfirmed) {
+        // ensure id is a string
+        const sid = id != null ? String(id) : id;
         axios
-          .delete(`https://project-apiif-3-b.vercel.app/api/fakultas/${id}`)
+          .delete(`https://newexpresssi5a-weld.vercel.app/api/mahasiswa/${sid}`)
           .then((response) => {
-            // Hapus fakultas dari state setelah sukses dihapus dari server
-            setFakultas(fakultas.filter((f) => f.id !== id));
+            // Hapus mahasiswa dari state setelah sukses dihapus dari server
+            setMahasiswa((prev) =>
+              prev.filter((f) => {
+                const fid = f._id ?? f.id ?? f.nim ?? f.npm ?? null;
+                return String(fid) !== sid;
+              })
+            );
             // Tampilkan notifikasi sukses
-            Swal.fire("Hapus!", "Data kamu sudah dihapus.", "sukses");
+            Swal.fire("Hapus!", "Data kamu sudah dihapus.", "success");
           })
           .catch((error) => {
-            console.error("Error menghapus data:", error); // Menangani error
-            Swal.fire("Error", "There was an issue deleting the data.", "error");
+            console.error("Error menghapus data:", error);
+            Swal.fire("Error", "Terdapat masalah saat menghapus data ini.", "error");
           });
       }
     });
@@ -142,6 +150,14 @@ export default function MahasiswaList() {
               const prodiId = resolveProdiId(m.prodi ?? m.prodi_id ?? m.prodiId ?? m.prodi?._id);
               const prodiName = (prodiId && prodiMap[prodiId]?.nama) || (m.prodi && typeof m.prodi === "string" ? m.prodi : m.prodi?.nama) || "";
 
+              const resolveMahasiswaId = (item) => {
+                if (!item) return "";
+                const raw = item._id ?? item.id ?? item.nim ?? item.npm ?? null;
+                return raw != null ? String(raw) : "";
+              };
+
+              const mId = resolveMahasiswaId(m);
+
               return (
                 <tr key={m._id ?? m.npm ?? Math.random()}>
                   <td>{m.npm ?? m.NPM ?? m.nim ?? ""}</td>
@@ -149,9 +165,11 @@ export default function MahasiswaList() {
                   <td>{m.tempat_lahir ?? m.tempatlahir ?? m.tempatLahir ?? ""}</td>
                   <td>{m.tanggal_lahir ?? m.tanggallahir ?? m.tanggalLahir ?? ""}</td>
                   <td>{prodiName || prodiId}</td>
-                  <button className="btn btn-danger" onClick={() => handleDelete(mahasiswa._id, mahasiswa.nama)}>
-                    Hapus
-                  </button>
+                  <td>
+                    <button className="btn btn-danger" onClick={() => handleDelete(mId, m.nama ?? m.name)}>
+                      Hapus
+                    </button>
+                  </td>
                 </tr>
               );
             })}
