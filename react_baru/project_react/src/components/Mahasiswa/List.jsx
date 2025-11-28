@@ -158,12 +158,24 @@ export default function MahasiswaList() {
 
               const mId = resolveMahasiswaId(m);
 
+              // Format tanggal lahir ke bentuk lokal yang mudah dibaca
+              const rawDate = m.tanggal_lahir ?? m.tanggallahir ?? m.tanggalLahir ?? null;
+              let formattedDate = "";
+              if (rawDate) {
+                const d = new Date(rawDate);
+                if (!Number.isNaN(d.getTime())) {
+                  formattedDate = d.toLocaleDateString("id-ID");
+                } else {
+                  formattedDate = String(rawDate);
+                }
+              }
+
               return (
                 <tr key={m._id ?? m.npm ?? Math.random()}>
                   <td>{m.npm ?? m.NPM ?? m.nim ?? ""}</td>
                   <td>{m.nama ?? m.name ?? ""}</td>
                   <td>{m.tempat_lahir ?? m.tempatlahir ?? m.tempatLahir ?? ""}</td>
-                  <td>{m.tanggal_lahir ?? m.tanggallahir ?? m.tanggalLahir ?? ""}</td>
+                  <td>{formattedDate}</td>
                   <td>{prodiName || prodiId}</td>
                   <td>
                     <button className="btn btn-danger" onClick={() => handleDelete(mId, m.nama ?? m.name)}>
