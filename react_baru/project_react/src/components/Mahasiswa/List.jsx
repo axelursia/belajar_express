@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function MahasiswaList() {
   const [mahasiswa, setMahasiswa] = useState([]);
@@ -83,6 +84,35 @@ export default function MahasiswaList() {
   //   fetchData();
   // }, []); // Dependency array kosong = hanya dijalankan sekali saat mount
 
+  // Fungsi untuk menghapus fakultas berdasarkan ID dengan konfirmasi SweetAlert2
+  const handleDelete = (id, nama) => {
+    Swal.fire({
+      title: "Apakah kamu yakin?",
+      text: `Kamu tidak akan bisa meengembalikan ini! Fakultas: ${nama}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      // Lakukan penghapusan jika dikonfirmasi
+      if (result.isConfirmed) {
+        axios
+          .delete(`https://project-apiif-3-b.vercel.app/api/fakultas/${id}`)
+          .then((response) => {
+            // Hapus fakultas dari state setelah sukses dihapus dari server
+            setFakultas(fakultas.filter((f) => f.id !== id));
+            // Tampilkan notifikasi sukses
+            Swal.fire("Hapus!", "Data kamu sudah dihapus.", "sukses");
+          })
+          .catch((error) => {
+            console.error("Error menghapus data:", error); // Menangani error
+            Swal.fire("Error", "There was an issue deleting the data.", "error");
+          });
+      }
+    });
+  };
+
   return (
     <div>
       <h1>Mahasiswa List</h1>
@@ -97,6 +127,7 @@ export default function MahasiswaList() {
             <th>Tempat Lahir</th>
             <th>Tanggal Lahir</th>
             <th>Prodi</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -118,6 +149,9 @@ export default function MahasiswaList() {
                   <td>{m.tempat_lahir ?? m.tempatlahir ?? m.tempatLahir ?? ""}</td>
                   <td>{m.tanggal_lahir ?? m.tanggallahir ?? m.tanggalLahir ?? ""}</td>
                   <td>{prodiName || prodiId}</td>
+                  <button className="btn btn-danger" onClick={() => handleDelete(mahasiswa._id, mahasiswa.nama)}>
+                    Hapus
+                  </button>
                 </tr>
               );
             })}
