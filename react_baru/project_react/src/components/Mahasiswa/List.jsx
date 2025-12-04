@@ -178,6 +178,9 @@ export default function MahasiswaList() {
                   <td>{formattedDate}</td>
                   <td>{prodiName || prodiId}</td>
                   <td>
+                    <NavLink to={`/mahasiswa/${mId}`} className="btn btn-warning me-2">
+                      Ubah
+                    </NavLink>
                     <button className="btn btn-danger" onClick={() => handleDelete(mId, m.nama ?? m.name)}>
                       Hapus
                     </button>

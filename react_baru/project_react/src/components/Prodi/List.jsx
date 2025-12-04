@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 // Import axios untuk melakukan HTTP request ke API
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function ProdiList() {
   // State untuk menyimpan data Prodi dari API
@@ -60,6 +61,38 @@ export default function ProdiList() {
   // Tampilkan pesan error jika ada kesalahan
   if (error) return <div>Error: {error}</div>;
 
+  // Fungsi untuk menghapus prodi berdasarkan ID dengan konfirmasi SweetAlert2
+  const handleDelete = (id, nama) => {
+    Swal.fire({
+      title: "Apakah kamu yakin?",
+      text: `Kamu tidak akan bisa mengembalikan ini! Prodi: ${nama}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const sid = id != null ? String(id) : id;
+        axios
+          .delete(`https://newexpresssi5a-weld.vercel.app/api/Prodi/${sid}`)
+          .then((response) => {
+            setProdi((prev) =>
+              prev.filter((p) => {
+                const pid = p._id ?? p.id ?? null;
+                return String(pid) !== sid;
+              })
+            );
+            Swal.fire("Hapus!", "Data kamu sudah dihapus.", "success");
+          })
+          .catch((error) => {
+            console.error("Error menghapus data:", error);
+            Swal.fire("Error", "Terdapat masalah saat menghapus data ini.", "error");
+          });
+      }
+    });
+  };
+
   // Render tabel Prodi jika data sudah tersedia
   return (
     <div>
@@ -73,23 +106,37 @@ export default function ProdiList() {
             <th>Nama</th>
             <th>Singkatan</th>
             <th>Nama Fakultas</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
           {/* Loop data Prodi dan tampilkan dalam baris tabel */}
-          {Prodi.map((pro) => (
-            // key={pro._id} untuk identifikasi unik setiap baris
-            <tr key={pro._id}>
-              <td>{pro.nama}</td>
-              <td>{pro.singkatan}</td>
-              <td>{pro.fakultas_id ? pro.fakultas_id.nama : null}</td>
-              {/* Tampilkan nama fakultas. Jika backend mengembalikan objek fakultas maka gunakan
-          pro.fakultas.nama; jika backend hanya mengembalikan id, gunakan facultyMap
-          yang dibangun dari endpoint /api/fakultas. Ada juga fallback ke properti
-          lain jika ada. */}
-              <td>{pro.fakultas?.nama ?? facultyMap[typeof pro.fakultas === "string" ? pro.fakultas : pro.fakultas?._id] ?? pro.namafakultas ?? pro.namasingkatan ?? nameFallbackMap[pro.nama] ?? ""}</td>
-            </tr>
-          ))}
+          {Prodi.map((pro) => {
+            const resolveProdiId = (item) => {
+              if (!item) return "";
+              const raw = item._id ?? item.id ?? null;
+              return raw != null ? String(raw) : "";
+            };
+
+            const proId = resolveProdiId(pro);
+
+            return (
+              <tr key={pro._id}>
+                <td>{pro.nama}</td>
+                <td>{pro.singkatan}</td>
+                <td>{pro.fakultas_id ? pro.fakultas_id.nama : null}</td>
+                <td>{pro.fakultas?.nama ?? facultyMap[typeof pro.fakultas === "string" ? pro.fakultas : pro.fakultas?._id] ?? pro.namafakultas ?? pro.namasingkatan ?? nameFallbackMap[pro.nama] ?? ""}</td>
+                <td>
+                  <NavLink to={`/prodi/${proId}`} className="btn btn-warning me-2">
+                    Ubah
+                  </NavLink>
+                  <button className="btn btn-danger" onClick={() => handleDelete(proId, pro.nama)}>
+                    Hapus
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
