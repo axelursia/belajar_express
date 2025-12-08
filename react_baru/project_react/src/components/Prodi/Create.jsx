@@ -39,8 +39,8 @@ export default function CreateProdi() {
     e.preventDefault();
 
     // Validasi input
-    if (!formData.nama || !formData.singkatan) {
-      setError("Semua field harus diisi!");
+    if (!formData.nama || !formData.singkatan || !formData.fakultas_id) {
+      setError("Semua field harus diisi dan fakultas harus dipilih!");
       return;
     }
 
@@ -49,12 +49,19 @@ export default function CreateProdi() {
 
     try {
       // Kirim POST request ke API
-      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/Prodi", formData);
+      // Pastikan kita tidak mengirimkan empty string untuk fakultas_id
+      const payload = {
+        nama: formData.nama.trim(),
+        singkatan: formData.singkatan.trim(),
+        fakultas_id: formData.fakultas_id,
+      };
+
+      const response = await axios.post("https://newexpresssi5a-weld.vercel.app/api/Prodi", payload);
 
       console.log("Prodi created:", response.data);
 
       // Redirect ke halaman list Prodi
-      navigate("/Prodi");
+      navigate("/prodi");
     } catch (err) {
       console.error("Error creating Prodi:", err);
       setError(err.response?.data?.message || err.message || "Terjadi kesalahan saat menyimpan data");
@@ -120,7 +127,10 @@ export default function CreateProdi() {
           <label htmlFor="fakultas_id" className="form-label">
             ID Fakultas
           </label>
-          <select name="fakultas_id" id="fakultas_id" value={formData.fakultas_id} onchange={handleChange} className="form-control">
+          <select name="fakultas_id" id="fakultas_id" value={formData.fakultas_id} onChange={handleChange} className="form-select">
+            <option value="" disabled>
+              -- Pilih Fakultas --
+            </option>
             {fakultas.map((fakultasItem) => (
               <option key={fakultasItem._id} value={fakultasItem._id}>
                 {fakultasItem.nama}

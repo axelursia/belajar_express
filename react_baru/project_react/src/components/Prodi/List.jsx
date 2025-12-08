@@ -112,20 +112,37 @@ export default function ProdiList() {
         <tbody>
           {/* Loop data Prodi dan tampilkan dalam baris tabel */}
           {Prodi.map((pro) => {
-            const resolveProdiId = (item) => {
+            const resolveId = (item) => {
               if (!item) return "";
               const raw = item._id ?? item.id ?? null;
               return raw != null ? String(raw) : "";
             };
 
-            const proId = resolveProdiId(pro);
+            const proId = resolveId(pro);
+
+            const resolveFakultasId = (item) => {
+              if (!item) return "";
+              const raw = item._id ?? item.id ?? item; // item may be object or string
+              return raw != null ? String(raw) : "";
+            };
+
+            // Prefer explicit fakultas object name, then try fakultas_id (object or string), then fakultas property
+            const fakultasObjName = pro.fakultas?.nama ?? pro.fakultas_id?.nama ?? null;
+            const fakultasIdCandidate = pro.fakultas_id ?? pro.fakultas ?? pro.fakultas?._id;
+            const fakultasId = resolveFakultasId(fakultasIdCandidate);
+            const fakultasNama =
+              fakultasObjName ||
+              (fakultasId ? facultyMap[fakultasId] : null) ||
+              pro.namafakultas ||
+              pro.namasingkatan ||
+              nameFallbackMap[pro.nama] ||
+              "";
 
             return (
               <tr key={pro._id}>
                 <td>{pro.nama}</td>
                 <td>{pro.singkatan}</td>
-                <td>{pro.fakultas_id ? pro.fakultas_id.nama : null}</td>
-                <td>{pro.fakultas?.nama ?? facultyMap[typeof pro.fakultas === "string" ? pro.fakultas : pro.fakultas?._id] ?? pro.namafakultas ?? pro.namasingkatan ?? nameFallbackMap[pro.nama] ?? ""}</td>
+                <td>{fakultasNama}</td>
                 <td>
                   <NavLink to={`/prodi/${proId}`} className="btn btn-warning me-2">
                     Ubah
